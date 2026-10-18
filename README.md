@@ -2,9 +2,25 @@
 
 Clipxy4all turns a video file or YouTube link into short, captioned clips. The AI model, caption fonts, Python runtime, and FFmpeg are included in the installer. No API key, separate Python installation, or model download is required.
 
+## Download
+
+**[Download Clipxy4all Setup 3.6.1](../../releases/latest)** — 1.94 GB · Windows 10 or 11, 64-bit.
+
+That one file contains everything: the app, the Python runtime, FFmpeg, the Whisper model, Node and the caption fonts. There is nothing else to download or install.
+
+To check the file you downloaded, run this in PowerShell and compare the result:
+
+```
+Get-FileHash "Clipxy4all Setup 3.6.1.exe" -Algorithm SHA256
+
+F6050395CE55D57B6EEF8D28EA8B0272E904CCEB2E541BC5C5E1597836F632FA
+```
+
+This repository holds the source only, about 1.4 MB. The bundled runtimes and the AI model are deliberately not in Git — they ship inside the installer. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) to work on the code.
+
 ## Install and open
 
-1. Run `Clipxy4all Setup.exe` and complete the Windows installer.
+1. Run `Clipxy4all Setup 3.6.1.exe` and complete the Windows installer.
 2. Open **Clipxy4all** from the desktop or Start menu. The app opens your browser at a local address such as `http://127.0.0.1:8000`.
 3. Upload a video file or paste a YouTube link, choose your clip settings, and select **Generate**. Your finished clips appear in **Library**.
 
