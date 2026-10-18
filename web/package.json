@@ -1,0 +1,1 @@
+{"name":"clipxy4all-dashboard","version":"3.6.1","private":true,"type":"module","scripts":{"build":"node build.mjs"},"devDependencies":{"esbuild":"0.28.2"}}

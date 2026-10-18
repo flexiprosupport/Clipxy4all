@@ -1,0 +1,34 @@
+# --- Bundled runtimes and binaries (shipped by the installer, not source) ---
+python/
+node/
+ffmpeg/
+models/
+assets/
+node_modules/
+*.exe
+*.dll
+*.onnx
+
+# --- Built frontend bundles (run `npm run build` in web/) ---
+web/dist/assets/
+
+# --- Runtime output and caches ---
+clips/
+downloads/
+transcripts/
+temp/
+static/
+data/
+tests/results/
+__pycache__/
+*.pyc
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.log
+
+# --- Editor / OS noise ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,14 @@
+import {build} from 'esbuild';
+import fs from 'node:fs';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=path.dirname(fileURLToPath(import.meta.url));
+const result=await build({entryPoints:[path.join(root,'src/dashboard.js')],bundle:true,format:'esm',minify:true,jsx:'transform',outdir:path.join(root,'dist/assets'),entryNames:'clipxy4all-[hash]',metafile:true,loader:{'.png':'file'},assetNames:'[name]-[hash]',legalComments:'eof'});
+const entry=Object.entries(result.metafile.outputs).find(([,v])=>v.entryPoint);
+const css=entry[1].cssBundle;
+let html=fs.readFileSync(path.join(root,'dist/index.html'),'utf8');
+html=html.replace(/src="\/assets\/(?:clipxy4all-|index-)[^"]+\.js"/,`src="/assets/${path.basename(entry[0])}"`);
+html=html.replace(/\s*<link[^>]+data-clipxy-enhancements[^>]*>/g,'');
+if(css) html=html.replace('</head>',`<link rel="stylesheet" data-clipxy-enhancements href="/assets/${path.basename(css)}">\n</head>`);
+fs.writeFileSync(path.join(root,'dist/index.html'),html);
+console.log('Built',path.basename(entry[0]));

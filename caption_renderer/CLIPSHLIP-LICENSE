@@ -1,0 +1,64 @@
+ClipShlip
+
+Copyright © 2026 Haris (@theharis.ai). All rights reserved.
+
+ClipShlip is free to use. It is not open source, and this file is the
+difference between those two things.
+
+
+WHAT YOU MAY DO
+
+You may download, install and use ClipShlip, for anything, including
+commercial work, at no cost and without a licence key. Clips you produce with
+it are yours. Nothing in this file claims any right over your videos, your
+captions, your branding or your output.
+
+
+WHAT YOU MAY NOT DO
+
+Without prior written permission from the copyright holder, you may not:
+
+  1. Redistribute ClipShlip, or any modified version of it, whether free or
+     for payment.
+
+  2. Publish, mirror or host the source code, in whole or in part, however it
+     was obtained — including source recovered from a shipped build.
+
+  3. Rebrand it. Removing or replacing the name, the icon, the "Made by Haris
+     Ai" attribution or the @theharis.ai handle, and presenting the result as
+     your own product, is specifically not permitted.
+
+  4. Sell it, or sell access to it.
+
+  5. Reuse its source code in another product.
+
+
+ABOUT THE BUNDLED COMPONENTS
+
+ClipShlip ships FFmpeg and whisper.cpp, which are not covered by this file.
+They carry their own licences, and those licences grant you rights that this
+one cannot take away. See LICENSES.md for the terms, the source URLs and the
+checksums.
+
+FFmpeg is bundled under the LGPL, which obliges the distributor to permit
+relinking against a different build of the library. That obligation is about
+FFmpeg. It does not extend to ClipShlip's own code, and complying with it does
+not make this application open source.
+
+
+IF YOU WANT SOMETHING ELSE
+
+These terms are restrictive on purpose, and they are not meant to stop anyone
+who is asking in good faith. If you want to build on this, package it for a
+platform, translate it, or ship it somewhere it does not reach yet, ask.
+Permission is a message away: @theharis.ai.
+
+
+NO WARRANTY
+
+This software is provided "as is", without warranty of any kind, express or
+implied, including but not limited to the warranties of merchantability,
+fitness for a particular purpose and non-infringement. In no event shall the
+copyright holder be liable for any claim, damages or other liability, whether
+in an action of contract, tort or otherwise, arising from, out of or in
+connection with the software or the use or other dealings in the software.
