@@ -4,6 +4,8 @@ Clipxy4all turns a video file or YouTube link into short, captioned clips. The A
 
 ## Download
 
+### Windows
+
 **[Download Clipxy4all Setup 3.6.1](../../releases/latest)** — 1.94 GB · Windows 10 or 11, 64-bit.
 
 That one file contains everything: the app, the Python runtime, FFmpeg, the Whisper model, Node and the caption fonts. There is nothing else to download or install.
@@ -15,6 +17,21 @@ Get-FileHash "Clipxy4all Setup 3.6.1.exe" -Algorithm SHA256
 
 F6050395CE55D57B6EEF8D28EA8B0272E904CCEB2E541BC5C5E1597836F632FA
 ```
+
+### macOS
+
+**[Download Clipxy4all-macOS-bundle.zip](../../releases/latest)** — 595 MB · macOS 12 or newer, Apple Silicon or Intel.
+
+There is no macOS installer. The zip carries the app, the Whisper model, the
+fonts and the caption renderer. Unzip it, install [Homebrew](https://brew.sh) if
+you do not have it, then right-click **SETUP-MAC.command** and choose Open. It
+installs Python, FFmpeg and Node, and writes a `Clipxy4all.command` you
+double-click to start.
+
+Macs have no CUDA, so transcription runs on the CPU and is slower than on an
+NVIDIA machine; rendering speed is unchanged. See [docs/MACOS.md](docs/MACOS.md).
+
+---
 
 This repository holds the source only, about 1.4 MB. The bundled runtimes and the AI model are deliberately not in Git — they ship inside the installer. See [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md) to work on the code.
 
@@ -43,6 +60,3 @@ Use the **Stop Clipxy4all** Start menu item to stop the local server when you ar
 
 - If the app does not open, try its desktop shortcut again. The launcher checks ports 8000–8015. If the server stops early, the dialog shows its last error; the full diagnostic log is at `%LOCALAPPDATA%\Clipxy4all\logs\startup.stderr.log`. Send that log with a support request.
 - Install Clipxy4all in a folder your Windows account can write to. Its temporary work and completed clips are stored inside the installation folder.
-- If the AI model cannot start, close memory-heavy apps and browser tabs, then use **Retry**. You can select **CPU** in the Compute setting if an NVIDIA driver is incompatible.
-- If a YouTube download fails, confirm the video is publicly accessible and try again. Uploading a local copy avoids network or site restrictions.
-- If rendering fails, check free disk space and retry with a shorter clip. The app does not delete completed clips when clearing its temporary cache.
