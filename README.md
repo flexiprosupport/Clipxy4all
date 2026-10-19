@@ -6,21 +6,21 @@ Clipxy4all turns a video file or YouTube link into short, captioned clips. The A
 
 ### Windows
 
-**[Download Clipxy4all Setup 3.6.1](../../releases/latest)** — 1.94 GB · Windows 10 or 11, 64-bit.
+**[Download Clipxy4all.Setup.3.6.1.exe](../../releases/latest/download/Clipxy4all.Setup.3.6.1.exe)** — 1.94 GB · Windows 10 or 11, 64-bit.
 
 That one file contains everything: the app, the Python runtime, FFmpeg, the Whisper model, Node and the caption fonts. There is nothing else to download or install.
 
 To check the file you downloaded, run this in PowerShell and compare the result:
 
 ```
-Get-FileHash "Clipxy4all Setup 3.6.1.exe" -Algorithm SHA256
+Get-FileHash "Clipxy4all.Setup.3.6.1.exe" -Algorithm SHA256
 
 F6050395CE55D57B6EEF8D28EA8B0272E904CCEB2E541BC5C5E1597836F632FA
 ```
 
 ### macOS
 
-**[Download Clipxy4all-macOS-bundle.zip](../../releases/latest)** — 595 MB · macOS 12 or newer, Apple Silicon or Intel.
+**[Download Clipxy4all-macOS-bundle.zip](../../releases/latest/download/Clipxy4all-macOS-bundle.zip)** — 595 MB · macOS 12 or newer, Apple Silicon or Intel.
 
 There is no macOS installer. The zip carries the app, the Whisper model, the
 fonts and the caption renderer. Unzip it, install [Homebrew](https://brew.sh) if
@@ -37,7 +37,7 @@ This repository holds the source only, about 1.4 MB. The bundled runtimes and th
 
 ## Install and open
 
-1. Run `Clipxy4all Setup 3.6.1.exe` and complete the Windows installer.
+1. Run `Clipxy4all.Setup.3.6.1.exe` and complete the Windows installer.
 2. Open **Clipxy4all** from the desktop or Start menu. The app opens your browser at a local address such as `http://127.0.0.1:8000`.
 3. Upload a video file or paste a YouTube link, choose your clip settings, and select **Generate**. Your finished clips appear in **Library**.
 
@@ -48,15 +48,3 @@ Uploads and local AI processing work without internet. A YouTube link requires i
 - Windows 10 or 11, 64-bit.
 - 8 GB RAM and about 10 GB free disk space are recommended, especially for longer videos.
 - An Intel Core i3 8th generation or comparable CPU is a practical starting point. Processing time depends on video length and the computer's hardware.
-- A dedicated GPU is optional. Auto mode uses a compatible NVIDIA GPU when available and falls back to CPU when GPU loading or transcription fails.
-
-## Your files
-
-Generated clips and library data are stored in the `clips` folder inside the location where you installed Clipxy4all (by default, `%LOCALAPPDATA%\Programs\Clipxy4all\clips`). Keep a separate copy of clips you want to preserve before uninstalling or changing computers. An earlier Clipxy4all installation has its own folder; its clips are not automatically moved into v3.6.
-
-Use the **Stop Clipxy4all** Start menu item to stop the local server when you are done. Closing the browser tab alone does not stop it.
-
-## If something goes wrong
-
-- If the app does not open, try its desktop shortcut again. The launcher checks ports 8000–8015. If the server stops early, the dialog shows its last error; the full diagnostic log is at `%LOCALAPPDATA%\Clipxy4all\logs\startup.stderr.log`. Send that log with a support request.
-- Install Clipxy4all in a folder your Windows account can write to. Its temporary work and completed clips are stored inside the installation folder.
