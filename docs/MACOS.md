@@ -23,6 +23,12 @@ Requires [Homebrew](https://brew.sh). From a clone of this repository:
 bash scripts/macos/setup.sh
 ```
 
+**Before running setup from a source checkout:** obtain the original dashboard
+`web/dist/assets/index-*.css` from the released macOS bundle or a working
+installation. This CSS is not tracked in Git. The setup now checks for it and
+rebuilds the dashboard JavaScript so the interface does not silently load
+without its required styles. A source checkout by itself is not a full installer.
+
 It installs `python@3.11`, `ffmpeg` and `node` if missing, creates a
 `.venv-macos` virtual environment, installs the Python dependencies, fetches
 the macOS build of the caption renderer's native canvas, and writes two
@@ -47,6 +53,12 @@ split-screen, or face tracking.
 Double-click **Clipxy4all.command** in the project root. It picks a free port
 from 8000–8015, starts the server and opens your browser at it.
 **Stop Clipxy4all.command** stops it. Closing the browser tab does not.
+
+The launcher waits for a `/health` response from the matching process before
+opening the browser. A second launch reuses that process rather than starting
+another server; the stop command only signals the PID that matches this exact
+installation. Logs are written to `data/macos-server.log`. If setup cannot
+find the dashboard CSS, copy the missing released assets into `web/dist/assets`.
 
 ## What differs from Windows
 
