@@ -7,12 +7,29 @@ PY="$ROOT/.venv-macos/bin/python"
 PID_FILE="$ROOT/.clipxy4all.pid"
 LOCK_DIR="$ROOT/.clipxy4all.launch.lock"
 
+process_cwd() {
+  local pid="$1" cwd=''
+  if command -v lsof >/dev/null 2>&1; then
+    cwd="$(lsof -a -p "$pid" -d cwd -Fn 2>/dev/null | sed -n 's/^n//p' | head -1)"
+  fi
+  if [[ -z "$cwd" && -e "/proc/$pid/cwd" ]]; then
+    cwd="$(readlink "/proc/$pid/cwd" 2>/dev/null || true)"
+  fi
+  printf '%s' "$cwd"
+}
+
 is_our_server() {
   local pid="$1" command_line
   [[ "$pid" =~ ^[0-9]+$ ]] || return 1
   command_line="$(ps -p "$pid" -o command= 2>/dev/null)" || return 1
-  # Never use a generic 'pkill uvicorn': another app may run uvicorn too.
-  [[ "$command_line" == *"$PY -m uvicorn app.main:app --host 127.0.0.1 --port "* ]]
+  # Match the uvicorn invocation, not the interpreter path. Homebrew's and
+  # python.org's framework Python re-exec Python.app and rewrite argv[0]
+  # (CPython Mac/Tools/pythonw.c), so ps never shows "$PY" for the server.
+  [[ "$command_line" == *" -m uvicorn app.main:app --host 127.0.0.1 --port "* ]] || return 1
+  # Then require *this* installation: the server is started from $ROOT and the
+  # app never changes directory. Never use a generic 'pkill uvicorn': another
+  # app, or another Clipxy4all copy, may run the same command.
+  [[ "$(process_cwd "$pid")" == "$ROOT" ]]
 }
 
 tracked_server() {
