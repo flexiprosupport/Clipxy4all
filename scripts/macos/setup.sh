@@ -30,6 +30,17 @@ for pkg in python@3.11 ffmpeg node; do
   fi
 done
 
+# The source repository deliberately omits the original dashboard stylesheet.
+# Without it, rebuilding JavaScript alone leaves a blank/unstyled interface.
+# The released macOS bundle or an installed copy supplies these files.
+if [ ! -f web/dist/index.html ]; then
+  die "Dashboard index is missing. Restore web/dist from the macOS bundle or an installed copy."
+fi
+base_css="$(sed -nE 's/.*href="(\/assets\/index-[^"]+\.css)".*/\1/p' web/dist/index.html | head -1)"
+if [ -z "$base_css" ] || [ ! -f "web/dist${base_css}" ]; then
+  die "Dashboard CSS is missing. Copy web/dist/assets from the macOS bundle or an installed copy."
+fi
+
 PY="$(brew --prefix python@3.11)/bin/python3.11"
 [ -x "$PY" ] || die "python3.11 not found at $PY"
 
@@ -46,6 +57,9 @@ say "Installing Python dependencies - this takes a few minutes"
 # Windows, so the macOS binding has to be fetched here.
 say "Installing the caption renderer's native canvas for macOS"
 ( cd caption_renderer && npm install --omit=dev --silent )
+
+say "Building the dashboard JavaScript for this installation"
+( cd web && npm ci --silent && npm run build )
 
 # --------------------------------------------------------------- AI model --
 # paths.py sets HF_HUB_OFFLINE=1, so nothing is ever downloaded at runtime.
@@ -71,37 +85,12 @@ say "Writing launchers"
 
 cat > 'Clipxy4all.command' <<'LAUNCH'
 #!/usr/bin/env bash
-cd "$(dirname "$0")"
-source .venv-macos/bin/activate
-
-# Two clips render at once by default; 1-8 is allowed.
-export CLIPXY4ALL_MAX_JOBS="${CLIPXY4ALL_MAX_JOBS:-2}"
-
-PORT=8000
-while [ $PORT -le 8015 ] && lsof -nP -iTCP:$PORT -sTCP:LISTEN >/dev/null 2>&1; do
-  PORT=$((PORT + 1))
-done
-
-echo "Starting Clipxy4all on http://127.0.0.1:$PORT"
-python -m uvicorn app.main:app --host 127.0.0.1 --port "$PORT" &
-SERVER_PID=$!
-echo $SERVER_PID > .clipxy4all.pid
-
-sleep 4 && open "http://127.0.0.1:$PORT" &
-
-trap 'kill $SERVER_PID 2>/dev/null; rm -f .clipxy4all.pid' INT TERM
-wait $SERVER_PID
+exec bash "$(dirname "$0")/scripts/macos/server.sh" start
 LAUNCH
 
 cat > 'Stop Clipxy4all.command' <<'STOP'
 #!/usr/bin/env bash
-cd "$(dirname "$0")"
-if [ -f .clipxy4all.pid ] && kill "$(cat .clipxy4all.pid)" 2>/dev/null; then
-  rm -f .clipxy4all.pid
-  echo "Clipxy4all stopped."
-else
-  pkill -f 'uvicorn app.main:app' && echo "Clipxy4all stopped." || echo "Clipxy4all was not running."
-fi
+exec bash "$(dirname "$0")/scripts/macos/server.sh" stop
 STOP
 
 chmod +x 'Clipxy4all.command' 'Stop Clipxy4all.command'

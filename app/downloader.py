@@ -24,6 +24,16 @@ from .uploads import ALLOWED_EXTS
 logger = logging.getLogger(__name__)
 
 
+def _yt_dlp_ffmpeg_location() -> Optional[str]:
+    """Only override yt-dlp's PATH discovery when bundled FFmpeg exists.
+
+    ensure_dirs() creates an empty ffmpeg/ even on macOS, so directory
+    existence alone must never override Homebrew's FFmpeg on PATH.
+    """
+    binary = FFMPEG_DIR / ("ffmpeg.exe" if os.name == "nt" else "ffmpeg")
+    return str(FFMPEG_DIR) if binary.is_file() else None
+
+
 class DownloadCancelled(Exception):
     pass
 
@@ -326,9 +336,7 @@ def download_video(
     out_template = str(DOWNLOADS_DIR / f"{clip_uuid}.%(ext)s")
     expected_path = DOWNLOADS_DIR / f"{clip_uuid}.mp4"
 
-    # Ensure FFmpeg is on PATH for yt-dlp DASH stream merging
-    if FFMPEG_DIR.is_dir() and str(FFMPEG_DIR) not in os.environ.get("PATH", ""):
-        os.environ["PATH"] = str(FFMPEG_DIR) + os.pathsep + os.environ.get("PATH", "")
+    ffmpeg_location = _yt_dlp_ffmpeg_location()
 
     # ── Pre-probe: detect the original audio track and optimal 1080p video stream ──
     original_audio_id: Optional[str] = None
@@ -339,7 +347,7 @@ def download_video(
             "no_warnings": True,
             "skip_download": True,
             "noplaylist": True,
-            "ffmpeg_location": str(FFMPEG_DIR) if FFMPEG_DIR.is_dir() else None,
+            "ffmpeg_location": ffmpeg_location,
         }
         with yt_dlp.YoutubeDL(probe_opts) as ydl:
             info = ydl.extract_info(url.strip(), download=False)
@@ -361,7 +369,7 @@ def download_video(
         # back to a tiny stream when no progressive mp4 existed.
         "format": fmt,
         "format_sort": ["res:1080", "hasaud", "lang", "br", "fps", "codec:h264:vp9"],
-        "ffmpeg_location": str(FFMPEG_DIR) if FFMPEG_DIR.is_dir() else None,
+        "ffmpeg_location": ffmpeg_location,
         "merge_output_format": "mp4",
         "outtmpl": out_template,
         "noplaylist": True,
